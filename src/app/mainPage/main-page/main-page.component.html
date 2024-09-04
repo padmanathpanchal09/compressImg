@@ -1,0 +1,56 @@
+<div class="image-compressor">
+    <h1>Image Compressor</h1>
+    <p class="subtitle">Best web app to compress image files online for free.</p>
+  
+    <div class="upload-area" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+      <div class="icon-container">
+        <i class="fas fa-image"></i>
+      </div>
+      <form [formGroup]="imageForm" (ngSubmit)="onSubmit()">
+        <div class="file-input-wrapper">
+          <input type="file" id="fileInput" (change)="onFileChange($event)" accept="image/*" hidden>
+          <label for="fileInput" class="file-input-label">
+            <span>Select Image</span>
+            <i class="fas fa-chevron-down"></i>
+          </label>
+        </div>
+      </form>
+      <p class="drag-drop-text">or, drag and drop an image here</p>
+    </div>
+  
+  
+    <div class="image-preview" *ngIf="selectedFile">
+      <h3 class="section-title">Your Image</h3>
+      <div class="image-info">
+        <div class="file-details">
+          <span class="file-name">{{ selectedFile.name }}</span>
+          <span class="file-size">{{ getFileSizeInKB(selectedFile.size) }} KB</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="uploadProgress"></div>
+          </div>
+          <div class="upload-status">
+            <span>Uploading {{ uploadProgress }}% ({{ uploadSpeed }} B/s)</span>
+            <button class="cancel-button" (click)="cancelCompression()">×</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="compressed-image-preview" *ngIf="isCompressionComplete">
+      <h3 class="section-title">Compressed Image</h3>
+      <div class="compressed-image-container">
+        <img [src]="compressedImage" alt="Compressed Image" class="preview-image">
+        <div class="image-details">
+          <p class="size-info">Size: {{ getFileSizeInMB(compressedFileSize) }} MB</p>
+          <button class="download-btn" (click)="downloadCompressedImage()">
+            <i class="fas fa-download"></i> Download Compressed Image
+          </button>
+
+        </div>
+      </div>
+    
+      <span class="made">× Made by padmanath panchal ×</span>
+    </div>
+  </div>
