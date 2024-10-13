@@ -3,7 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import Pica from 'pica'; // Import the library
+import Pica from 'pica';
 
 @Component({
   selector: 'app-main-page',
@@ -26,11 +26,10 @@ export class MainPageComponent {
     compressedImage: string | null = null;
     uploadSubscription: Subscription | null = null;
     private compressionInterval: any;
-    minCompressedSize: number = 1024; // Set a default minimum compressed size (in bytes)
+    minCompressedSize: number = 1024;
   
     constructor(private formBuilder: FormBuilder) {
       this.imageForm = this.formBuilder.group({
-        // Remove compression settings from the form
       });
     }
   
@@ -42,7 +41,7 @@ export class MainPageComponent {
       if (input.files && input.files.length > 0) {
         this.selectedFile = input.files[0];
         this.createFilePreview();
-        this.startCompression(); // Automatically start compression after file selection
+        this.startCompression(); 
       }
     }
   
@@ -63,12 +62,11 @@ export class MainPageComponent {
       this.compressedFileSize = 0;
       this.compressedImage = null;
   
-      // Simulate upload progress
       let progress = 0;
       this.compressionInterval = setInterval(() => {
         progress += 10;
         this.uploadProgress = progress;
-        this.uploadSpeed = `${Math.floor(Math.random() * 1000)} B/s`; // Random speed for simulation
+        this.uploadSpeed = `${Math.floor(Math.random() * 1000)} B/s`;
         if (progress >= 100) {
           clearInterval(this.compressionInterval);
           this.compressionInterval = null;
@@ -78,11 +76,9 @@ export class MainPageComponent {
     }
   
     onSubmit(): void {
-      // Implement your submission logic here
+
     }
   
-    // Remove toggleSettings method if it exists
-    // Remove showSettings property if it exists
   
     getFileSizeInMB(bytes: number): string {
       return (bytes / (1024 * 1024)).toFixed(2);
@@ -93,19 +89,16 @@ export class MainPageComponent {
     }
   
     cancelCompression(): void {
-      // Clear the compression interval
       if (this.compressionInterval) {
         clearInterval(this.compressionInterval);
         this.compressionInterval = null;
       }
   
-      // Cancel the upload if it's in progress
       if (this.uploadSubscription) {
         this.uploadSubscription.unsubscribe();
         this.uploadSubscription = null;
       }
   
-      // Reset all relevant properties
       this.uploadProgress = 0;
       this.uploadSpeed = '0 B/s';
       this.isCompressionComplete = false;
@@ -131,8 +124,8 @@ export class MainPageComponent {
     downloadCompressedImage(): void {
       if (this.compressedImage) {
         const a = document.createElement('a');
-        a.href = this.compressedImage; // Use the compressed image URL
-        a.download = 'compressed_image.jpg'; // Name for the downloaded file
+        a.href = this.compressedImage; 
+        a.download = `compressed_${this.selectedFile?.name}`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -141,48 +134,45 @@ export class MainPageComponent {
   
     compressImage(): void {
         const img = new Image();
-        img.src = this.selectedFilePreview as string; // Use the preview as the source
+        img.src = this.selectedFilePreview as string; 
         img.onload = () => {
             const canvas = document.createElement('canvas');
             const pica = new Pica();
-            const MAX_WIDTH = 800; // Set max width for compression
+            const MAX_WIDTH = 800; 
             const scaleSize = MAX_WIDTH / img.width;
-
             canvas.width = MAX_WIDTH;
             canvas.height = img.height * scaleSize;
 
             const ctx = canvas.getContext('2d');
             if (ctx && this.selectedFile) {
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                const originalSize = this.selectedFile.size; // Get original file size
-                let quality = 0.9; // Start with high quality
+                const originalSize = this.selectedFile.size; 
+                let quality = 0.9; 
 
                 const compress = (quality: number) => {
                     pica.resize(canvas, canvas, {
-                        quality: 3, // Quality setting (1-3)
+                        quality: 3,
                     }).then(result => {
-                        return pica.toBlob(result, 'image/jpeg', quality); // Convert to Blob with adjusted quality
+                        return pica.toBlob(result, 'image/jpeg', quality);
                     }).then(blob => {
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                            this.compressedImage = reader.result as string; // Get the compressed image
-                            this.compressedFileSize = blob.size; // Update compressed file size
+                            this.compressedImage = reader.result as string; 
+                            this.compressedFileSize = blob.size; 
 
-                            // Check if the compressed size is greater than or equal to the original size
                             if (this.compressedFileSize >= originalSize && quality > 0.1) {
-                                quality -= 0.1; // Decrease quality
-                                compress(quality); // Retry compression
+                                quality -= 0.1; 
+                                compress(quality);
                             } else if (this.compressedFileSize < this.minCompressedSize && quality > 0.1) {
-                                quality -= 0.1; // Decrease quality to increase size
-                                compress(quality); // Retry compression
+                                quality -= 0.1; 
+                                compress(quality); 
                             } else {
-                                // Ensure the final compressed image is not smaller than the minimum size
                                 if (this.compressedFileSize < this.minCompressedSize) {
                                     console.warn('Final compressed image is below minimum size. Adjusting quality.');
-                                    quality = 0.1; // Set to minimum quality
-                                    compress(quality); // Retry compression
+                                    quality = 0.1; 
+                                    compress(quality);
                                 } else {
-                                    // Check the quality of the compressed image
+                        
                                     if (quality < 0.5) {
                                         console.warn('Quality of the image is low. Consider increasing quality.');
                                     }
@@ -196,24 +186,23 @@ export class MainPageComponent {
                     });
                 };
 
-                compress(quality); // Start compression
+                compress(quality); 
             }
         };
     }
   
-    // New method to handle drag over event
     onDragOver(event: DragEvent): void {
-      event.preventDefault(); // Prevent default to allow drop
+      event.preventDefault(); 
     }
   
-    // New method to handle drop event
+
     onDrop(event: DragEvent): void {
-      event.preventDefault(); // Prevent default behavior
+      event.preventDefault(); 
       const files = event.dataTransfer?.files;
       if (files && files.length > 0) {
         this.selectedFile = files[0];
         this.createFilePreview();
-        this.startCompression(); // Automatically start compression after file selection
+        this.startCompression();
       }
     }
   }

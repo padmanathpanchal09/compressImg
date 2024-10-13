@@ -14,13 +14,19 @@
   h1 {
     font-size: 2.8rem;
     margin-bottom: 0.5rem;
-    font-weight: 700;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    font-style: italic;
   }
   
   .subtitle {
     color: #bdbdbd;
     margin-bottom: 3rem;
     font-size: 1.1rem;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+  
   }
   
   .upload-area {
@@ -62,12 +68,18 @@
   }
   
   .file-input-label span {
-    margin-right: 0.8rem;
+    text-align: center;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    font-style: italic;
   }
   
   .drag-drop-text {
     margin-top: 1.5rem;
     color: #bdbdbd;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    font-style: italic;
   }
   
   .image-preview {
@@ -81,9 +93,17 @@
   
   .section-title {
     color: #ffffff;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-bottom: 1rem;
     text-align: left;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+  .inline{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
   
   .image-info {
@@ -191,7 +211,9 @@
     padding: 0.8rem 1.5rem;
     border-radius: 25px;
     font-size: 1rem;
-    font-weight: 600;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    font-style: italic;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
@@ -221,7 +243,7 @@
   }
 
   .made {
-    font-size: 0.5rem; /* Set font size to small */
-    color: #fdc94e; /* Optional: Set color for better visibility */
+    font-size: 0.5rem; 
+    color: #fdc94e;
     margin-top: 5px;
 }
